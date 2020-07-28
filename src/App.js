@@ -1,7 +1,8 @@
 import React from 'react';
-import Welcome from "./Welcome";
 import Clock from "./Clock";
 import './App.css';
+import Catalog from './Catalog';
+import Apod from './Apod';
 
 
 
@@ -23,12 +24,12 @@ class App extends React.Component {
   };
 
   render = () => {
+
     return (
       <div className="App">
-        <Clock locale={this.state.france} coucou={this.notify} />
-        <Clock locale={this.state.usa}    coucou={this.notify}/>
-        <Clock locale={this.state.egypt}  coucou={this.notify}/>
-        <Welcome name="Nicolas" />
+        <Apod />
+        <Clock locale="fr-FR" />
+        <Catalog />
       </div>
     );
   };
