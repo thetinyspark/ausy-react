@@ -1,40 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-class Clock extends React.Component {
+function Clock(props){
+    const [date, setDate]       = useState(new Date());
+    const [hidden, setHidden]   = useState(false);
+    const [timer, setTimer]     = useState(0);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: new Date(),
-            locale: props.locale,
-            hidden: false
-        };
-    }
-
-    componentDidMount = () => {
-        this.timer = window.setInterval(this.refresh, 1000);
+    const destroyHandler = () => {
+        window.clearInterval(timer);
     };
 
-    componentWillUnmount = () => {
-        window.clearInterval(this.timer);
-    };
+    const refresh       = () => {    setDate( new Date() );      };
+    const clickHandler  = () => {    setHidden( !hidden );       };
 
-    clickHandler = () => {
-        this.setState({hidden: !this.state.hidden });
-    };
+    useEffect( 
+        () => {
+            let id = window.setInterval( refresh, 1000);
+            setTimer(id);
+            return destroyHandler;
+        }, 
+        []
+    );
 
-    refresh = () => {
-        this.setState({date: new Date()});
-    };
 
-    render = () => {
-        return (
-            <>
-                <button onClick={this.clickHandler}>{this.state.hidden ? "Afficher" : "Cacher"}</button>
-                { !this.state.hidden && <p>{this.state.date.toLocaleTimeString(this.state.locale)}</p>}
-            </>
-        );
-    };
+    return (
+        <>
+            <button onClick={clickHandler}>{hidden ? "Afficher" : "Cacher"}</button>
+            { !hidden && <p>{date.toLocaleTimeString(props.locale)}</p>}
+        </>
+    );
 }
+
 
 export default Clock;
