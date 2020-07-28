@@ -1,9 +1,15 @@
 import React from "react";
+import './Apod.css';
 
 class Apod extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { apod: null, date: "2020-01-01" };
+        this.state = {
+            apod: null,
+            date: "2020-01-01",
+            img: "",
+            hd: false
+        };
     }
 
     onError = (error) => {
@@ -17,7 +23,7 @@ class Apod extends React.Component {
     refresh = () => {
         const key = "alxhJbkmFVHXK10qRwos2PvcIdCy9r69H62FoQEy";
         const date = this.state.date;
-        const url = "https://api.nasa.gov/planetary/apod?api_key="+key+"&date="+date;
+        const url = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=" + date;
 
         fetch(url).then(
 
@@ -25,7 +31,7 @@ class Apod extends React.Component {
                 response.json().then(
 
                     (apodData) => {
-                        this.setState({ apod: apodData });
+                        this.setState({ apod: apodData, date: date, img: apodData.url });
                     },
 
                     this.onError
@@ -41,13 +47,30 @@ class Apod extends React.Component {
     changeHandler = (event) => {
         const element = event.target;
         this.setState(
-            { date: element.value }, 
+            { date: element.value },
             this.refresh
         );
     };
 
     submitHanler = (event) => {
         event.preventDefault();
+    };
+
+    qualityHandler = (event) => {
+        const hd = event.target.value === "true";
+        let img = ""; 
+        if( this.state.apod !== null ){
+            if( hd )
+                img = this.state.apod.hdurl; 
+            else 
+                img = this.state.apod.url;
+        }
+        this.setState(
+            { 
+                hd: hd , 
+                img: img
+            }
+        );
     };
 
     render = () => {
@@ -60,6 +83,13 @@ class Apod extends React.Component {
                     <input type="submit" value="Envoyer" />
                 </form>
 
+                <select name="hdsd" value={this.state.hd} onChange={this.qualityHandler}>
+                    <option value={false}>SD</option>
+                    <option value={true}>HD</option>
+                </select>
+
+
+
                 {
                     this.state.apod !== null
 
@@ -67,11 +97,14 @@ class Apod extends React.Component {
 
                     (
                         <>
+
+
                             <h2>{this.state.apod.title}</h2>
 
                             {
                                 this.state.apod.media_type === "image" &&
-                                <img src={this.state.apod.url} alt={this.state.apod.title} />
+                                <img className={ this.state.hd ? "hd" : "sd"} 
+                                     src={this.state.img} alt={this.state.apod.title} />
                             }
 
                             {
