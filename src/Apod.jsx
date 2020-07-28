@@ -1,126 +1,76 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Apod.css';
 
-class Apod extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            apod: null,
-            date: "2020-01-01",
-            img: "",
-            hd: false
-        };
-    }
+function Apod( props ){
+    const [apod, setApod] = useState(null);
+    const [date, setDate] = useState("2020-01-01");
+    const [img, setImg] = useState("");
+    const [hd, setHd] = useState(false);
 
-    onError = (error) => {
-        alert("Erreur: " + error);
-    };
+    const onError       = (error) => alert("Erreur: " + error)  ;
+    const changeHandler = (event) => setDate(event.target.value);
+    const submitHanler  = (event) => event.preventDefault()     ;
 
-    componentDidMount = () => {
-        this.refresh();
-    };
-
-    refresh = () => {
+    const refresh = () => {
         const key = "alxhJbkmFVHXK10qRwos2PvcIdCy9r69H62FoQEy";
-        const date = this.state.date;
         const url = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=" + date;
-
         fetch(url).then(
-
             (response) => {
                 response.json().then(
-
                     (apodData) => {
-                        this.setState({ apod: apodData, date: date, img: apodData.url });
+                        setApod(apodData);
+                        setImg(apodData.url);
                     },
-
-                    this.onError
-
+                    onError
                 )
             },
-
-            this.onError
-
-        )
-    };
-
-    changeHandler = (event) => {
-        const element = event.target;
-        this.setState(
-            { date: element.value },
-            this.refresh
+            onError
         );
     };
 
-    submitHanler = (event) => {
-        event.preventDefault();
+    const qualityHandler = (event) => {
+        const isHd = event.target.value === "true";
+        let url = (apod === null) ? "" : (isHd) ? apod.hdurl : apod.url; 
+        setHd(isHd); 
+        setImg(url);
     };
 
-    qualityHandler = (event) => {
-        const hd = event.target.value === "true";
-        let img = ""; 
-        if( this.state.apod !== null ){
-            if( hd )
-                img = this.state.apod.hdurl; 
-            else 
-                img = this.state.apod.url;
-        }
-        this.setState(
-            { 
-                hd: hd , 
-                img: img
+    useEffect( refresh,  [date] );
+
+    return (
+        <>
+            <form onSubmit={submitHanler}>
+                <label>Date :</label>
+                <input type="date" value={date} onChange={changeHandler} name="date" />
+                <input type="submit" value="Envoyer" />
+            </form>
+
+            <select name="hdsd" value={hd} onChange={qualityHandler}>
+                <option value={false}>SD</option>
+                <option value={true}>HD</option>
+            </select>
+            {
+                apod !== null &&
+                (
+                    <>
+                        <h2>{apod.title}</h2>
+                        {
+                            apod.media_type === "image" &&
+                            <img className={ hd ? "hd" : "sd"} src={img} alt={apod.title} />
+                        }
+
+                        {
+                            apod.media_type === "video" &&
+                            <a href={apod.url} target="_blank">Consulter la vidéo</a>
+                        }
+
+                        <p>{apod.date} - {apod.copyright}</p>
+                        <p>{apod.explanation}</p>
+                    </>
+                )
             }
-        );
-    };
+        </>
+    );
 
-    render = () => {
-        return (
-            <>
-
-                <form onSubmit={this.submitHanler}>
-                    <label>Date :</label>
-                    <input type="date" value={this.state.date} onChange={this.changeHandler} name="date" />
-                    <input type="submit" value="Envoyer" />
-                </form>
-
-                <select name="hdsd" value={this.state.hd} onChange={this.qualityHandler}>
-                    <option value={false}>SD</option>
-                    <option value={true}>HD</option>
-                </select>
-
-
-
-                {
-                    this.state.apod !== null
-
-                    &&
-
-                    (
-                        <>
-
-
-                            <h2>{this.state.apod.title}</h2>
-
-                            {
-                                this.state.apod.media_type === "image" &&
-                                <img className={ this.state.hd ? "hd" : "sd"} 
-                                     src={this.state.img} alt={this.state.apod.title} />
-                            }
-
-                            {
-                                this.state.apod.media_type === "video" &&
-                                <a href={this.state.apod.url} target="_blank">Consulter la vidéo</a>
-                            }
-
-                            <p>{this.state.apod.date} - {this.state.apod.copyright}</p>
-                            <p>{this.state.apod.explanation}</p>
-                        </>
-                    )
-                }
-
-            </>
-        );
-    };
 }
-
 export default Apod;
