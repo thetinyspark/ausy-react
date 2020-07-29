@@ -2,7 +2,7 @@ import React from "react";
 
 function ProductThumb(props){
     const addToCart = () => {
-        props.add(props.name);
+        props.add(props.id);
     };
 
     return (

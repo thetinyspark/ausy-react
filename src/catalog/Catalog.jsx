@@ -22,16 +22,14 @@ function Catalog(props) {
         []
     ); 
 
-    const addProductToCart = (productName) => {
-        alert(productName + " a été ajouté au panier");
-    };
+   
 
     return (
         <>
             {
                 products.map(
                     (currentProduct, index) => {
-                        return <ProductThumb key={index} {...currentProduct} add={addProductToCart} />
+                        return <ProductThumb key={index} {...currentProduct} add={props.add} />
                     }
                 )
             }
