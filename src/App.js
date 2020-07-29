@@ -1,10 +1,10 @@
 import React from 'react';
-import Clock from "./Clock";
-import Catalog from './Catalog';
-import Apod from './Apod';
-import Welcome from './Welcome';
+import Catalog from './catalog/Catalog';
+import Cart from './cart/Cart';
+import Header from './common/Header';
+import Menu from './common/Menu';
+import Footer from './common/Footer';
 import './App.css';
-import Cart from './Cart';
 
 
 
@@ -14,8 +14,10 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <Cart />
-        <Catalog />
+        <Header />
+        <Menu />
+        <p>Contenu dynamique (corps de page variable selon l'url)</p>
+        <Footer />
       </div>
     );
   };
