@@ -29,7 +29,7 @@ function Catalog(props) {
             {
                 products.map(
                     (currentProduct, index) => {
-                        return <ProductThumb key={index} {...currentProduct} add={props.add} />
+                        return <ProductThumb key={index} {...currentProduct} />
                     }
                 )
             }

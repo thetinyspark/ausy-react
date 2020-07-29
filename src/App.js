@@ -6,6 +6,7 @@ import Menu from './common/Menu';
 import Footer from './common/Footer';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
+import ProductDetail from './catalog/ProductDetail';
 
 
 
@@ -33,8 +34,17 @@ function App(props) {
         <Router>
           <Menu />
           <Switch>
+            <Route  path="/detail/:id"
+                    render={
+                      (props) => {
+                          return <ProductDetail {...props} 
+                                                add={addToCart} />
+                      }
+                    } 
+                   >         
+            </Route>
             <Route path="/catalog">
-              <Catalog add={addToCart}/>
+              <Catalog/>
             </Route>
             <Route path="/cart">
               <Cart products={[...mycart]} onDelete={removeFromCart} />
