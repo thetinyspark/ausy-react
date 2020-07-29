@@ -12,7 +12,7 @@ import ProductDetail from './catalog/ProductDetail';
 
 function App(props) {
 
-    const [mycart, setMyCart] = useState([1,1,2,2,2,3,3,3,3]);
+    const [mycart, setMyCart] = useState([]);
 
     const addToCart = (id) => {
       alert("Un produit a été ajouté au panier: " + id);

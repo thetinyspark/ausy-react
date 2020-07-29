@@ -1,0 +1,15 @@
+.thumb{
+    border: 1px solid black;
+    display: inline-block;
+    width: 20%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    margin-top: 25px;
+    padding: 5px;
+    box-shadow: -10px 5px 5px rgba(1,1,1,0.2);
+}
+
+.thumb img{
+    height: 100px;
+    width: 100px;
+}

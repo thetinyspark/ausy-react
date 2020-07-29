@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductThumb from "./ProductThumb";
+import { Link } from "react-router-dom";
 
 
 function Catalog(props) {
@@ -11,8 +12,8 @@ function Catalog(props) {
                 (response) => {
                     if (response.status === 200) {
                         response.json().then(
-                            (productsTab)   => setProducts(productsTab),
-                            (error)         => alert("error:" + error)
+                            (productsTab) => setProducts(productsTab),
+                            (error) => alert("error:" + error)
                         );
                     }
                 },
@@ -20,16 +21,20 @@ function Catalog(props) {
             );
         },
         []
-    ); 
+    );
 
-   
+
 
     return (
         <>
             {
                 products.map(
                     (currentProduct, index) => {
-                        return <ProductThumb key={index} {...currentProduct} />
+                        return (
+                            <Link to={"/detail/" + currentProduct.id}>
+                                <ProductThumb key={index} {...currentProduct} />
+                            </Link>
+                        )
                     }
                 )
             }
