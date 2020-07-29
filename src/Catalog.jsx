@@ -1,70 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductThumb from "./ProductThumb";
-class Catalog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            products: []
-        };
-    }
 
-    componentDidMount = () => {
-        fetch("/data/products.json").then(
 
-            (response) => {
+function Catalog(props) {
+    const [products, setProducts] = useState([]);
 
-                if (response.status === 200) {
+    useEffect(
+        () => {
+            fetch("/data/products.json").then(
+                (response) => {
+                    if (response.status === 200) {
+                        response.json().then(
+                            (productsTab)   => setProducts(productsTab),
+                            (error)         => alert("error:" + error)
+                        );
+                    }
+                },
+                (error) => alert("error:" + error)
+            );
+        },
+        []
+    ); 
 
-                    response.json().then(
-
-                        (productsTab) => {
-                            this.setState(
-                                {
-                                    products: productsTab
-                                }
-                            )
-                        }, 
-
-                        (error) => {
-                            alert("error:" + error);
-                        }
-
-                    );
-
-                }
-                else{
-                    console.log(response.status);
-                }
-            },
-
-            (error) => {
-                alert("error:" + error);
-            }
-
-        );
-    };
-
-    addProductToCart = (productName) => {
+    const addProductToCart = (productName) => {
         alert(productName + " a été ajouté au panier");
     };
 
-    render = () => {
-        return (
-            <>
-                {
-                    this.state.products.map(
-
-                        (currentProduct, index) => {
-
-                            return <ProductThumb key={index} {...currentProduct} add={this.addProductToCart} />
-
-                        }
-
-                    )
-                }
-
-            </>
-        )
-    }
+    return (
+        <>
+            {
+                products.map(
+                    (currentProduct, index) => {
+                        return <ProductThumb key={index} {...currentProduct} add={addProductToCart} />
+                    }
+                )
+            }
+        </>
+    )
 }
+
+
 export default Catalog;

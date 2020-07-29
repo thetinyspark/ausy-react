@@ -4,6 +4,7 @@ import Catalog from './Catalog';
 import Apod from './Apod';
 import Welcome from './Welcome';
 import './App.css';
+import Cart from './Cart';
 
 
 
@@ -13,7 +14,8 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <Apod />
+        <Cart />
+        <Catalog />
       </div>
     );
   };
